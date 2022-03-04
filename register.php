@@ -6,6 +6,8 @@ $validasi = new Validasi();
 $error_nama = "";
 $error_email = "";
 $error_pw = "";
+$alert_berhasil_daftar = "";
+$alert_user_sama = "";
 
 $pwErr = "";
 $namaErr = "";
@@ -53,18 +55,6 @@ if (isset($_POST['register'])) {
         $emailErr == ""
     ) {
         $daftar = $fungsi->daftar($username, $email, $enkripsi);
-        if ($daftar) {
-            echo '<div class="alert alert-success alert-dismissible fade show">';
-            echo 'Akun Berhasil Dibuat';
-            echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
-            echo '<span aria-hidden="true">&times;</span>';
-            echo '</button>';
-            echo '</div>';
-
-            echo '<meta http-equiv="refresh" content="3;url=index.php">';
-        } else {
-            echo "not";
-        }
     }
 }
 ?>
@@ -86,10 +76,18 @@ if (isset($_POST['register'])) {
         <div class="row justify-content-center align-items-center">
             <div class="col-md-6">
                 <div class="col-md-12">
-                    <form action="" method="POST">
+                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
                         <img class="" src="https://ik.imagekit.io/tk6ir0e7mng/uploads/2021/10/1634634983539.jpeg?tr=w-609.98,h-344.64" alt="">
-                        <h4><a href="index.php">Home</a></h4>
-                        <h3 class="text-center text-info">Register</h3>
+                        <h4><a href="login.php">Home</a></h4>
+                        <h3 class="text-center text-secondary">Register</h3>
+                        <?php if (isset($_POST['register']))
+                            if ($daftar) {
+                                $alert_berhasil_daftar = $validasi->alert_berhasil();
+
+                                echo '<meta http-equiv="refresh" content="3;url=index.php">';
+                            } else {
+                                $alert_user_sama = $validasi->alert_gagal();
+                            } ?>
                         <div class="form-group">
                             <label for="" class="text-info">Email</label>
                             <input type="email" name="email" id="" class="form-control <?php echo ($error_email || $error_email != "" ? "is-invalid" : "") ?>" value="<?php echo (isset($_POST['register']) ? $_POST['email'] : "") ?>">
@@ -104,7 +102,7 @@ if (isset($_POST['register'])) {
                         </div>
                         <div class="form-group">
                             <label for="" class="text-info">Password</label>
-                            <input type="password" name="password" class="form-control <?php echo ($error_pw || $pwErr != "" ? "is-invalid" : ""); ?>">
+                            <input type="password" name="password" class="form-control <?php echo ($error_pw || $pwErr != "" ? "is-invalid" : ""); ?>" value="<?php echo (isset($_POST['register']) ? $_POST['password'] : "") ?>">
                             <span class="warning"><?php echo $error_pw; ?></span>
                             <span class="warning"><?php echo $pwErr; ?></span>
                         </div>

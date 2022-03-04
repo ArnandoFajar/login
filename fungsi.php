@@ -24,14 +24,30 @@ class Fungsi
     }
     public function daftar($username, $email, $password)
     {
-        $aktif = 'Y';
-        $query = $this->db->prepare("INSERT INTO user(nama_user,email,password,aktif) VALUES(:nama_user,:email,:password,:aktif)");
-        $query->bindParam(':nama_user', $username);
-        $query->bindParam(':email', $email);
-        $query->bindParam(':password', $password);
+        $check = $this->db->prepare("SELECT * FROM user WHERE nama_user = :user");
+        $check->bindParam(':user', $username);
+        $check->execute();
+        $row = $check->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            return false;
+        } else {
+            $aktif = 'Y';
+            $query = $this->db->prepare("INSERT INTO user(nama_user,email,password,aktif) VALUES(:nama_user,:email,:password,:aktif)");
+            $query->bindParam(':nama_user', $username);
+            $query->bindParam(':email', $email);
+            $query->bindParam(':password', $password);
+            $query->bindParam(':aktif', $aktif);
+            $query->execute();
+            return true;
+        }
+    }
+    public function blokir_akun($username)
+    {
+        $aktif = "T";
+        $query = $this->db->prepare("UPDATE user SET aktif=:aktif WHERE nama_user=:username");
         $query->bindParam(':aktif', $aktif);
+        $query->bindParam(':username', $username);
         $query->execute();
-        return $query->rowCount();
     }
 }
 class Validasi
@@ -49,6 +65,33 @@ class Validasi
     {
         echo '<div class="alert alert-danger alert-dismissible fade show">';
         echo 'Username dan Password salah';
+        echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+        echo '<span aria-hidden="true">&times;</span>';
+        echo '</button>';
+        echo '</div>';
+    }
+    public function alert_gagal()
+    {
+        echo '<div class="alert alert-danger alert-dismissible fade show">';
+        echo 'Username ' . $_POST['username'] . ' telah Dibuat mohon diganti';
+        echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+        echo '<span aria-hidden="true">&times;</span>';
+        echo '</button>';
+        echo '</div>';
+    }
+    function alert_berhasil()
+    {
+        echo '<div class="alert alert-success alert-dismissible fade show">';
+        echo 'Akun Berhasil dibuat, akan diahlikan ke halaman login';
+        echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+        echo '<span aria-hidden="true">&times;</span>';
+        echo '</button>';
+        echo '</div>';
+    }
+    public function alert_blokir()
+    {
+        echo '<div class="alert alert-danger alert-dismissible fade show">';
+        echo 'Username ' . $_POST['username'] . ' telah diblokir mohon hubungi admin';
         echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
         echo '<span aria-hidden="true">&times;</span>';
         echo '</button>';

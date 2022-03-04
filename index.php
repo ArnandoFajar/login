@@ -1,72 +1,45 @@
 <?php
-include('fungsi.php');
-$fungsi = new Fungsi();
-$validasi = new Validasi();
+if (!empty($_SESSION['user'])) {
+} else {
+    echo '<script>alert("Maaf Login Dahulu !");window.location="login.php"</script>';
+}
 ?>
+
 <!doctype html>
 <html lang="id">
 
 <head>
-    <title>Halaman Login</title>
+    <title>Beranda</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body class="bg-light">
-    <div class="container">
-        <div class="row justify-content-center align-items-center">
-            <div class="col-md-6">
-                <div class="col-md-12">
-                    <img class="" src="https://ik.imagekit.io/tk6ir0e7mng/uploads/2021/10/1634634983539.jpeg?tr=w-609.98,h-344.64" alt="">
-                    <h3 class="text-center text-info">login</h3>
-                    <?php
-                    //jika user terdaftar
-                    if (isset($_POST['login'])) {
-                        $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
-                        $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
-                        $user = $fungsi->login($username);
-                        if ($user) {
-                            //check password
-                            if (password_verify($password, $user["password"])) {
-                                // buat Session
-                                session_start();
-                                $_SESSION["user"] = $user;
-                                // login sukses, alihkan ke halaman timeline
-                                header("Location: timeline.php");
-                            } else {
-                                echo $validasi->alert_password_salah();
-                            }
-                        } else {
-                            echo $validasi->alert_password_user_salah();
-                        }
-                    }
-                    ?>
-                    <form class="form" action="" method="post">
-                        <div class="form-group">
-                            <label for="username" class="text-info">Username:</label><br>
-                            <input type="text" name="username" id="username" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="password" class="text-info">Password:</label><br>
-                            <input type="text" name="password" id="password" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" name="login" class="btn btn-info btn-md" value="submit">
-                        </div>
-                        <div id="register-link" class="text-right">
-                            <a href="register.php" class="text-info">Register here</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-
+<body>
+    <table class="table table-striped table-inverse table-responsive">
+        <thead class="thead-inverse">
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td scope="row"></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td scope="row"></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
